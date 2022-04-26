@@ -6,9 +6,9 @@ const createProduct = asyncHandler(async (req,res) => {
     const newProduct = new Product(req.body)
     try{
        const savedProduct = await newProduct.save();
-       res.status(500).json(savedProduct)
+       res.status(200).json(savedProduct)
     }catch(err){
-        res.status(500).json(err)
+        res.status(200).json(err)
     }
 })
 //UPDATE
@@ -21,9 +21,9 @@ const updateProduct = asyncHandler(async (req,res) => {
            },
            {new:true}
        );
-       res.status(500).json(updatedProduct)
+       res.status(200).json(updatedProduct)
     }catch(err){
-        res.status(500).json(err)
+        res.status(200).json(err)
     }
 })
 
@@ -33,9 +33,9 @@ const deleteProduct = asyncHandler(async (req,res) => {
         await Product.findByIdAndDelete(
            req.params.id
        );
-       res.status(500).json("Product has been deleted Successfully!!")
+       res.status(200).json("Product has been deleted Successfully!!")
     }catch(err){
-        res.status(500).json(err)
+        res.status(200).json(err)
     }
 })
 //GET PRODUCT
@@ -44,9 +44,9 @@ const getProduct = asyncHandler(async (req,res) => {
         const product = await Product.findById(
            req.params.id
        );
-       res.status(500).json(product)
+       res.status(200).json(product)
     }catch(err){
-        res.status(500).json(err)
+        res.status(200).json(err)
     }
 })
 
@@ -68,9 +68,9 @@ const getAllProducts = asyncHandler(async (req,res) => {
             products = await Product.find();
         }
      
-       res.status(500).json(products)
+       res.status(200).json(products)
     }catch(err){
-        res.status(500).json(err)
+        res.status(200).json(err)
     }
 })
 module.exports = {

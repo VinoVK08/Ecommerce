@@ -5,7 +5,9 @@ import Product from "./pages/Product";
 import Home from "./pages/Home";
 import Cart from "./pages/Cart";
 
+
 function App() {
+
   return (
     <>
       <Router>
@@ -13,7 +15,7 @@ function App() {
         <div className="container"> 
           <Routes>
             <Route path='/' element={<Home />}/>
-            <Route path='/product' element={<Product />}/>
+            <Route path='/product/:id' element={<Product />}/>
             <Route path='/cart' element={<Cart />}/>
           </Routes>
 
