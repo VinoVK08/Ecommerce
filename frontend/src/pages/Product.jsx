@@ -1,14 +1,27 @@
-import {Link, useParams} from 'react-router-dom';
+import {Link, useNavigate, useParams} from 'react-router-dom';
 import axios from '../axios'
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import "./product.css"
-
+import "./data.js"
+import { CartContext, CartDispatchContext } from '../context/productContext';
 function Product() {
-
+   
     const params = useParams();
+    const navigate = useNavigate();
+
+    const cart = useContext(CartContext);
+    const setCart = useContext(CartDispatchContext);
 
     const [product, setProduct] = useState([]);
-  
+
+
+    const handleClick = (item) => {
+        item.amount = 1
+        if (cart.indexOf(item) !== -1) return;
+        setCart([...cart, item]);
+        navigate("/cart")
+    };
+
     useEffect(() => {
       axios.get(`/product/${params.id}`).then((res)=>{
       setProduct(res.data) 
@@ -43,7 +56,7 @@ function Product() {
                             <div class="sizes mt-5">
                                 {/* <h6 class="text-uppercase">Size</h6> <label class="radio"> <input type="radio" name="size" value="S" checked /> <span>S</span> </label> <label class="radio"> <input type="radio" name="size" value="M" /> <span>M</span> </label> <label class="radio"> <input type="radio" name="size" value="L" /> <span>L</span> </label> <label class="radio"> <input type="radio" name="size" value="XL /"> <span>XL</span> </label> <label class="radio"> <input type="radio" name="size" value="XXL"> <span>XXL</span> </label> */}
                             </div>
-                            <div class="cart mt-4 align-items-center"> <button class="btn btn-danger text-uppercase mr-2 px-4">Add to cart</button> <button class="btn btn-danger text-uppercase mr-2 px-4">Buy Now</button> <i class="fa fa-heart text-muted"></i> <i class="fa fa-share-alt text-muted"></i> </div>
+                            <div class="cart mt-4 align-items-center"> <button class="btn btn-danger text-uppercase mr-2 px-4" onClick={() => handleClick(product)}>Add to cart</button> <button class="btn btn-danger text-uppercase mr-2 px-4">Buy Now</button> <i class="fa fa-heart text-muted"></i> <i class="fa fa-share-alt text-muted"></i> </div>
                         </div>
                     </div>
                 </div>

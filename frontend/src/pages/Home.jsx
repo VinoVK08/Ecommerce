@@ -2,12 +2,25 @@
 // import { BsFillChatDotsFill , BsFillHandThumbsUpFill} from "react-icons/bs";
 import "./home.css"
 import axios from '../axios'
-import { useEffect, useState } from "react";
-import { Link } from 'react-router-dom';
+import { useContext, useEffect, useState } from "react";
+import { Link, useNavigate } from 'react-router-dom';
+import { CartContext, CartDispatchContext } from '../context/productContext';
 
 function Home() {
 
   const [product, setProduct] = useState([]);
+
+  const navigate = useNavigate();
+
+  const cart = useContext(CartContext);
+  const setCart = useContext(CartDispatchContext);
+
+  const handleClick = (item) => {
+      item.amount = 1
+      if (cart.indexOf(item) !== -1) return;
+      setCart([...cart, item]);
+      navigate("/cart")
+  };
   
   useEffect(() => {
     axios.get("/product").then((res)=>{
@@ -41,7 +54,7 @@ function Home() {
             </div>
 
             <div className="d-flex justify-content-between mb-2" style={{ marginTop: "20px"}}>
-            <Link to={`/product/${item._id}`}><button type="button" className="w-100 btn btn-outline-dark">View Product</button></Link>
+            <button type="button" className="w-100 btn btn-outline-dark" onClick={() => handleClick(item)}>Add to cart</button>
               <Link to={`/product/${item._id}`}><button type="button" className="w-100 btn btn-dark">View Product</button></Link>
             </div>
           </div>

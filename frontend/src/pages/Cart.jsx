@@ -1,162 +1,73 @@
-import {Link} from 'react-router-dom';
-import { useState } from 'react';
-import "./cart.css"
+import React, { useContext, useState, useEffect } from "react";
+// import "../styles/cart.css";
+import "./Carts.css"
+import "./data.js"
+import { CartContext, CartDispatchContext } from '../context/productContext';
 
-function Cart() {
+const Cart = () => {
+  const cart = useContext(CartContext);
+  const [price, setPrice] = useState(0);
+  const setCart = useContext(CartDispatchContext);
 
-  // const [formData, setFormData] = useState({
-  //     username:'',
-  //     email:'',
-  //     password:'',
-  //     cpassword:'',
-  // });
+  // const [cart, setCart] = useState([]);
 
-  // const { username, email, password, cpassword } = formData
+  const handleClick = (item) => {
+    if (cart.indexOf(item) !== -1) return;
+    setCart([...cart, item]);
+  };
 
-  // const onChange = (e) =>{
-  //     setFormData((prevState) => ({
-  //       ...prevState,
-  //       [e.target.name]: [e.target.value]
-  //     }))
-  // }
+  const handleChange = (item, d) => {
+    const ind = cart.indexOf(item);
+    const arr = cart;
+    arr[ind].amount += d;
 
-  // const onSubmit = (e) => {
+    if (arr[ind].amount === 0) arr[ind].amount = 1;
+    setCart([...arr]);
+  };
+  
+  const handleRemove = (id) => {
+    const arr = cart.filter((item) => item._id !== id);
+    setCart(arr);
+    handlePrice();
+  };
 
-  //   e.prevetDefault()
+  const handlePrice = () => {
+    let ans = 0;
+    cart.map((item) => (ans += item.amount * item.price));
+    setPrice(ans);
+  };
 
-  //   if (password !== cpassword){
-  //       return(
-  //           <div class="alert alert-danger text-center" >
-  //           <strong>You already logged in! </strong> 
-  //           <p><a href="{% url 'logout' %}">Click here to logout!</a></p>
-  //           </div>
-  //       )
-  //   }
-  // }
+  useEffect(() => {
+    handlePrice();
+  });
 
   return (
-    <div className="wrap cf">
-  {/* <h1 className="projTitle">Responsive Table<span>-Less</span> Shopping Cart</h1> */}
-  <div className="heading cf">
-    <h1>My Cart</h1>
-    <a href="#" className="continue">Continue Shopping</a>
-  </div>  
-  <div className="cart">
-    <ul className="cartWrap">
-      <li className="items odd">
-        
-    <div className="infoWrap"> 
-        <div className="cartSection">
-        <img src="http://lorempixel.com/output/technics-q-c-300-300-4.jpg" alt="" className="itemImg" />
-          <p className="itemNumber">#QUE-007544-002</p>
-          <h3>Item Name 1</h3>
-        
-           <p> <input type="text"  className="qty" placeholder="3"/> x $5.00</p>
-        
-          <p className="stockStatus"> In Stock</p>
-        </div>  
     
-        
-        <div className="prodTotal cartSection">
-          <p>$15.00</p>
+    <article>
+      <br /><br /><br />
+      {cart.map((item) => (
+        <div className="cart_box" key={item._id}>
+          <div className="cart_img">
+            <img src={item.img} alt="" />
+            <p>{item.title}</p>
+          </div>
+          <div>
+            <button onClick={() => handleChange(item, 1)}>+</button>
+            <button>{item.amount}</button>
+            <button onClick={() => handleChange(item, -1)}>-</button>
+          </div>
+          <div>
+            <span>{item.price}</span>
+            <button onClick={() => handleRemove(item._id)}>Remove</button>
+          </div>
         </div>
-              <div className="cartSection removeWrap">
-           <a href="#" className="remove">x</a>
-        </div>
+      ))}
+      <div className="total">
+        <span>Total Price of your Cart</span>
+        <span>Rs - {price}</span>
       </div>
-      </li>
-      <li className="items even">
-        
-       <div className="infoWrap"> 
-        <div className="cartSection">
-         
-        <img src="http://lorempixel.com/output/technics-q-c-300-300-4.jpg" alt="" className="itemImg" />
-          <p className="itemNumber">#QUE-007544-002</p>
-          <h3>Item Name 1</h3>
-        
-           <p> <input type="text"  className="qty" placeholder="3"/> x $5.00</p>
-        
-          <p className="stockStatus"> In Stock</p>
-        </div>  
-    
-        
-        <div className="prodTotal cartSection">
-          <p>$15.00</p>
-        </div>
-              <div className="cartSection removeWrap">
-           <a href="#" className="remove">x</a>
-        </div>
-      </div>
-      </li>
-      
-            <li className="items odd">
-             <div className="infoWrap"> 
-        <div className="cartSection">
-            
-        <img src="http://lorempixel.com/output/technics-q-c-300-300-4.jpg" alt="" className="itemImg" />
-          <p className="itemNumber">#QUE-007544-002</p>
-          <h3>Item Name 1</h3>
-        
-           <p> <input type="text"  className="qty" placeholder="3"/> x $5.00</p>
-        
-          <p className="stockStatus out"> Out of Stock</p>
-        </div>  
-    
-        
-        <div className="prodTotal cartSection">
-          <p>$15.00</p>
-        </div>
-                    <div className="cartSection removeWrap">
-           <a href="#" className="remove">x</a>
-        </div>
-              </div>
-      </li>
-      <li className="items even">
-       <div className="infoWrap"> 
-        <div className="cartSection info">
-             
-        <img src="http://lorempixel.com/output/technics-q-c-300-300-4.jpg" alt="" className="itemImg" />
-          <p className="itemNumber">#QUE-007544-002</p>
-          <h3>Item Name 1</h3>
-        
-          <p> <input type="text"  className="qty" placeholder="3"/> x $5.00</p>
-        
-          <p className="stockStatus"> In Stock</p>
-          
-        </div>  
-    
-        
-        <div className="prodTotal cartSection">
-          <p>$15.00</p>
-        </div>
-    
-            <div className="cartSection removeWrap">
-           <a href="#" className="remove">x</a>
-        </div>
-         </div>
-         {/* <div className="special"><div className="specialContent">Free gift with purchase!, gift wrap, etc!!</div></div> */}
-      </li>
- 
-    </ul>
-  </div>
-  
-  {/* <div className="promoCode"><label for="promo">Have A Promo Code?</label><input type="text" name="promo" placholder="Enter Code" />
-  <a href="#" className="btn"></a></div> */}
-  
-  <div className="subtotal cf">
-    <ul>
-      <li className="totalRow"><span className="label">Subtotal</span><span className="value">$35.00</span></li>
-      
-          <li className="totalRow"><span className="label">Shipping</span><span className="value">$5.00</span></li>
-      
-            <li className="totalRow"><span className="label">Tax</span><span className="value">$4.00</span></li>
-            <li className="totalRow final"><span className="label">Total</span><span className="value">$44.00</span></li>
-      <li className="totalRow"><a href="#" className="btn continue">Checkout</a></li>
-    </ul>
-  </div>
-</div>
-    
-  )
-}
+    </article>
+  );
+};
 
-export default Cart
+export default Cart;
